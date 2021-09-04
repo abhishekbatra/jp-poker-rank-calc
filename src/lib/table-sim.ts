@@ -3,11 +3,11 @@ import { Hand } from "./hand";
 import { User } from "./user";
 import { Table } from "./table";
 
-function getRandomInt(max) {
+function getRandomInt(max: number) {
   return Math.floor(Math.random() * max);
 }
 
-function getSimulatedTable() {
+export function getSimulatedTable(): Table {
 	const numUsers = getRandomInt(5) + 2;
 	let table = new Table();
 
