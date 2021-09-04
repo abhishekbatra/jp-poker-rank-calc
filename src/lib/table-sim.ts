@@ -13,11 +13,11 @@ export function getSimulatedTable(): Table {
 
 	for (let i = 0; i < numUsers; ++i) {
 		const hand = new Hand([
-			new Card(getRandomInt(14), getRandomInt(5)),
-			new Card(getRandomInt(14), getRandomInt(5)),
-			new Card(getRandomInt(14), getRandomInt(5)),
-			new Card(getRandomInt(14), getRandomInt(5)),
-			new Card(getRandomInt(14), getRandomInt(5)),
+			new Card(getRandomInt(14), getRandomInt(4)),
+			new Card(getRandomInt(14), getRandomInt(4)),
+			new Card(getRandomInt(14), getRandomInt(4)),
+			new Card(getRandomInt(14), getRandomInt(4)),
+			new Card(getRandomInt(14), getRandomInt(4)),
 		]);
 
 		table.addUser(new User(`${i}`, `Person ${i}`, hand));
