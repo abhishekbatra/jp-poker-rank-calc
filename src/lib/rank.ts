@@ -102,7 +102,7 @@ export class FullHouseCalculation extends HandRankCalculation {
 		}
 
 		if (answer === 0) {
-			answer === this.universalCompare(this.pairRank, (otherCalculation as FullHouseCalculation).pairRank);
+			answer = this.universalCompare(this.pairRank, (otherCalculation as FullHouseCalculation).pairRank);
 		}
 
 		return answer;
