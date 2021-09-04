@@ -561,10 +561,8 @@ export class HandRankCalculator {
 		}
 	}
 
-	getPairCalculationForHand(): HandRankCalculation|undefined {
-		let handRankCalc: HandRankCalculation|undefined = undefined;
-
-		[
+	getPairCalculationForHand(): HandRankCalculation {
+		let orderedRanks = [
 			HandRank.StraightFlush,
 			HandRank.FourOfAKind,
 			HandRank.FullHouse,
@@ -573,15 +571,16 @@ export class HandRankCalculator {
 			HandRank.ThreeOfAKind,
 			HandRank.TwoPair,
 			HandRank.OnePair,
-			HandRank.HighCard,
-		].forEach(rank => {
-			handRankCalc = this.getPairCalculationForRank(rank);
-			if (handRankCalc.rankDetected) {
-				return handRankCalc;
+		]
+		
+		for (const rank of orderedRanks) {
+			const currentCalc = this.getPairCalculationForRank(rank);
+			if (currentCalc.rankDetected) {
+				return currentCalc;
 			}
-		});
+		}
 
-		return handRankCalc;
+		return this.getPairCalculationForRank(HandRank.HighCard);
 	}
 }
 
