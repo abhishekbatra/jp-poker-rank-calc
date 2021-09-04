@@ -15,4 +15,8 @@ export class Table {
 			return firstUserCalculator.getPairCalculationForHand().compare(secondUserCalculator.getPairCalculationForHand());
 		})
 	}
+
+	public get users(): User[] {
+		return this._users;
+	}
 }

@@ -11,6 +11,14 @@ export class User {
 		return this._hand;
 	}
 
+	public get name(): string {
+		return this._name;
+	}
+
+	public get id(): string {
+		return this._id;
+	}
+
 	equals(other: User): boolean {
 		return this._id === other._id;
 	}
