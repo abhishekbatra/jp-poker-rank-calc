@@ -34,7 +34,6 @@ test('user with best hand should be last in list returned by sortUsersByRank', (
 	);
 
 	const sortedUsers = table.sortUsersByRank();
-	console.log(sortedUsers);
 
 	expect(sortedUsers[1].id).toBe('2');
 });
