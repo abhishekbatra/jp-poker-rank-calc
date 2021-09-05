@@ -12,7 +12,7 @@ export class Table {
 		return [...this._users].sort((firstUser: User, secondUser: User) => {
 			const firstUserCalculator = new HandRankCalculator(firstUser.hand);
 			const secondUserCalculator = new HandRankCalculator(secondUser.hand);
-			return firstUserCalculator.getPairCalculationForHand().compare(secondUserCalculator.getPairCalculationForHand());
+			return firstUserCalculator.getCalculationForHand().compare(secondUserCalculator.getCalculationForHand());
 		})
 	}
 

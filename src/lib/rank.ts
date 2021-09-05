@@ -3,29 +3,29 @@ import { Card, CardRank } from "./card";
 import { Hand } from "./hand";
 
 export enum HandRank {
-	StraightFlush,
-	FourOfAKind,
-	FullHouse,
-	Flush,
-	Straight,
-	ThreeOfAKind,
-	TwoPair,
-	OnePair,
 	HighCard,
+	OnePair,
+	TwoPair,
+	ThreeOfAKind,
+	Straight,
+	Flush,
+	FullHouse,
+	FourOfAKind,
+	StraightFlush,
 }
 
 export abstract class HandRankCalculation {
 	constructor(
 		public rank: HandRank,
 		public rankDetected: boolean = false,
-	) {}
+	) { }
 
 	/**
 	 * 
 	 * @returns -1 => less than, 0 => equal, positive => greater than
 	 */
 	public universalCompare(a: number, b: number): number {
-		if (a > b) {
+		if (a < b) {
 			return -1;
 		} else if (a === b) {
 			return 0;
@@ -42,10 +42,10 @@ export abstract class HandRankCalculation {
 export class StraightFlushCalculation extends HandRankCalculation {
 	constructor(
 		public rank: HandRank,
-		public isRankDetected: boolean,
+		public rankDetected: boolean,
 		public highestRank: CardRank,
 	) {
-		super(rank, isRankDetected);
+		super(rank, rankDetected);
 	}
 
 	public compare(otherCalculation: HandRankCalculation): number {
@@ -54,19 +54,19 @@ export class StraightFlushCalculation extends HandRankCalculation {
 		if (answer === 0) {
 			answer = this.universalCompare(this.highestRank, (otherCalculation as StraightFlushCalculation).highestRank);
 		}
-		
+
 		return answer;
 	}
 }
 
-export class FourOfAKindCalculation extends HandRankCalculation{
+export class FourOfAKindCalculation extends HandRankCalculation {
 	constructor(
 		public rank: HandRank,
-		public isRankDetected: boolean,
+		public rankDetected: boolean,
 		public quadrupletRank: CardRank,
 		public kickerRank: CardRank,
 	) {
-		super(rank, isRankDetected);
+		super(rank, rankDetected);
 	}
 
 	public compare(otherCalculation: HandRankCalculation): number {
@@ -87,11 +87,11 @@ export class FourOfAKindCalculation extends HandRankCalculation{
 export class FullHouseCalculation extends HandRankCalculation {
 	constructor(
 		public rank: HandRank,
-		public isRankDetected: boolean,
+		public rankDetected: boolean,
 		public tripletRank: CardRank,
 		public pairRank: CardRank,
 	) {
-		super(rank, isRankDetected);
+		super(rank, rankDetected);
 	}
 
 	public compare(otherCalculation: HandRankCalculation): number {
@@ -112,10 +112,10 @@ export class FullHouseCalculation extends HandRankCalculation {
 export class FlushCalculation extends HandRankCalculation {
 	constructor(
 		public rank: HandRank,
-		public isRankDetected: boolean,
+		public rankDetected: boolean,
 		public sortedRanks: CardRank[],
 	) {
-		super(rank, isRankDetected);
+		super(rank, rankDetected);
 	}
 
 	public compare(otherCalculation: HandRankCalculation): number {
@@ -134,10 +134,10 @@ export class FlushCalculation extends HandRankCalculation {
 export class StraightCalculation extends HandRankCalculation {
 	constructor(
 		public rank: HandRank,
-		public isRankDetected: boolean,
+		public rankDetected: boolean,
 		public highestRank: CardRank,
 	) {
-		super(rank, isRankDetected);
+		super(rank, rankDetected);
 	}
 
 	public compare(otherCalculation: HandRankCalculation): number {
@@ -154,12 +154,12 @@ export class StraightCalculation extends HandRankCalculation {
 export class ThreeOfAKindCalculation extends HandRankCalculation {
 	constructor(
 		public rank: HandRank,
-		public isRankDetected: boolean,
+		public rankDetected: boolean,
 		public tripletRank: CardRank,
 		public highestKickerRank: CardRank,
 		public lowestKickerRank: CardRank,
 	) {
-		super(rank, isRankDetected);
+		super(rank, rankDetected);
 	}
 
 	public compare(otherCalculation: HandRankCalculation): number {
@@ -184,12 +184,12 @@ export class ThreeOfAKindCalculation extends HandRankCalculation {
 export class TwoPairCalculation extends HandRankCalculation {
 	constructor(
 		public rank: HandRank,
-		public isRankDetected: boolean,
+		public rankDetected: boolean,
 		public highPairRank: CardRank,
 		public lowPairRank: CardRank,
 		public kickerRank: CardRank,
 	) {
-		super(rank, isRankDetected);
+		super(rank, rankDetected);
 	}
 
 	public compare(otherCalculation: HandRankCalculation): number {
@@ -214,13 +214,13 @@ export class TwoPairCalculation extends HandRankCalculation {
 export class OnePairCalculation extends HandRankCalculation {
 	constructor(
 		public rank: HandRank,
-		public isRankDetected: boolean,
+		public rankDetected: boolean,
 		public pairRank: CardRank,
 		public highestKickerRank: CardRank,
 		public middleKickerRank: CardRank,
 		public lowestKickerRank: CardRank,
 	) {
-		super(rank, isRankDetected);
+		super(rank, rankDetected);
 	}
 
 	public compare(otherCalculation: HandRankCalculation): number {
@@ -249,10 +249,10 @@ export class OnePairCalculation extends HandRankCalculation {
 export class HighCardCalculation extends HandRankCalculation {
 	constructor(
 		public rank: HandRank,
-		public isRankDetected: boolean,
+		public rankDetected: boolean,
 		public sortedRanks: CardRank[],
 	) {
-		super(rank, isRankDetected);
+		super(rank, rankDetected);
 	}
 
 	public compare(otherCalculation: HandRankCalculation): number {
@@ -324,7 +324,7 @@ export class HandRankCalculator {
 	mapToHighAce(cards: Card[]) {
 		return cards.map((card): Card => {
 			if (card.rank === CardRank.ACE) {
-				let newCard = new Card(card.rank, card.suit);
+				let newCard = new Card(CardRank.HIGH_ACE, card.suit);
 				return newCard;
 			} else {
 				return card;
@@ -335,32 +335,35 @@ export class HandRankCalculator {
 	// TODO: Change names of functions of the form is{HandRank} to get{HandRankCalculation}
 	isStraighFlushImpl(cards: Card[]): StraightFlushCalculation {
 		return new StraightFlushCalculation(
-			HandRank.StraightFlush, 
-			this.cardsAreSameSuit(cards) && this.cardsAreConsecutive(cards), 
+			HandRank.StraightFlush,
+			this.cardsAreSameSuit(cards) && this.cardsAreConsecutive(cards),
 			cards[0].rank
 		);
 	}
-	
+
 	isStraightFlushHighAce(cards: Card[]): StraightFlushCalculation {
-		return this.isStraighFlushImpl(this.mapToHighAce(cards));
+		return this.isStraighFlushImpl(this.sortedByRank(this.mapToHighAce(cards)));
 	}
 
 	isStraighFlush(): StraightFlushCalculation {
-		if (this.hasAce) {
+		if (!this.hasAce) {
 			return this.isStraighFlushImpl(this.cardsSortedByRank);
 		} else {
-			return this.isStraighFlushImpl(this.cardsSortedByRank) || this.isStraightFlushHighAce(this.cardsSortedByRank);
+			const highAceCalc = this.isStraightFlushHighAce(this.cardsSortedByRank);
+			const lowAceCalc = this.isStraighFlushImpl(this.cardsSortedByRank);
+			
+			return (highAceCalc.rankDetected) ? highAceCalc : lowAceCalc;
 		}
 	}
 
 	isFourOfAKind(): FourOfAKindCalculation {
 		let quadrupletRank: CardRank = CardRank.NONE;
 		let kickerRank: CardRank = CardRank.NONE;
-		let isRankDetected = false;
+		let rankDetected = false;
 
 		this.hand.cards.forEach((searchCard: Card, index: number) => {
 			if (this.rankCounts[index] === 4) {
-				isRankDetected = true;
+				rankDetected = true;
 				quadrupletRank = searchCard.rank;
 				kickerRank = this.hand.cards.filter(card => card.rank !== searchCard.rank)[0].rank;
 			}
@@ -368,7 +371,7 @@ export class HandRankCalculator {
 
 		return new FourOfAKindCalculation(
 			HandRank.FourOfAKind,
-			isRankDetected,
+			rankDetected,
 			quadrupletRank,
 			kickerRank,
 		);
@@ -377,7 +380,7 @@ export class HandRankCalculator {
 	isFullHouse(): FullHouseCalculation {
 		let hasTriplet = false;
 		let hasPair = false;
-		let isRankDetected = false;
+		let rankDetected = false;
 		let tripletRank = CardRank.NONE;
 		let pairRank = CardRank.NONE;
 
@@ -393,35 +396,35 @@ export class HandRankCalculator {
 		});
 
 		if (hasTriplet && hasPair) {
-			isRankDetected = true;
+			rankDetected = true;
 		} else {
-			isRankDetected = false;
+			rankDetected = false;
 		}
 
 		return new FullHouseCalculation(
 			HandRank.FullHouse,
-			isRankDetected,
+			rankDetected,
 			tripletRank,
 			pairRank,
 		);
 	}
 
 	isFlush(): FlushCalculation {
-		let isRankDetected = this.cardsAreSameSuit(this.hand.cards);
+		let rankDetected = this.cardsAreSameSuit(this.hand.cards);
 
 		return new FlushCalculation(
 			HandRank.Flush,
-			isRankDetected,
+			rankDetected,
 			this.cardsSortedByRank.map(card => card.rank),
 		);
 	}
 
 	isStraight(): StraightCalculation {
-		let isRankDetected = this.cardsAreConsecutive(this.cardsSortedByRank);
+		let rankDetected = this.cardsAreConsecutive(this.cardsSortedByRank);
 
 		return new StraightCalculation(
 			HandRank.Straight,
-			isRankDetected,
+			rankDetected,
 			this.cardsSortedByRank[0].rank
 		)
 	}
@@ -503,7 +506,7 @@ export class HandRankCalculator {
 		let highestKickerRank = CardRank.NONE;
 		let middleKickerRank = CardRank.NONE;
 		let lowestKickerRank = CardRank.NONE;
-		
+
 		this.hand.cards.forEach((searchCard: Card, index: number) => {
 			if (this.rankCounts[index] === 2) {
 				isOnePair = true;
@@ -534,7 +537,7 @@ export class HandRankCalculator {
 		);
 	}
 
-	getPairCalculationForRank(handRank: HandRank): HandRankCalculation {
+	getCalculationForRank(handRank: HandRank): HandRankCalculation {
 		switch (handRank) {
 			case HandRank.StraightFlush:
 				return this.isStraighFlush();
@@ -561,7 +564,7 @@ export class HandRankCalculator {
 		}
 	}
 
-	getPairCalculationForHand(): HandRankCalculation {
+	getCalculationForHand(): HandRankCalculation {
 		let orderedRanks = [
 			HandRank.StraightFlush,
 			HandRank.FourOfAKind,
@@ -572,15 +575,15 @@ export class HandRankCalculator {
 			HandRank.TwoPair,
 			HandRank.OnePair,
 		]
-		
+
 		for (const rank of orderedRanks) {
-			const currentCalc = this.getPairCalculationForRank(rank);
+			const currentCalc = this.getCalculationForRank(rank);
 			if (currentCalc.rankDetected) {
 				return currentCalc;
 			}
 		}
 
-		return this.getPairCalculationForRank(HandRank.HighCard);
+		return this.getCalculationForRank(HandRank.HighCard);
 	}
 }
 
